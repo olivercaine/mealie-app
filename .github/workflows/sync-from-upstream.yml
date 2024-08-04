@@ -1,31 +1,27 @@
 # Troubleshooting: https://github.com/marketplace/actions/actions-template-sync#troubleshooting
 
+name: Sync from upstream
 on:
-  push:
-    branches:
-      - main
+  # push: # You probably want to uncomment these 3 lines
+  #   branches:
+  #     - main
+  workflow_dispatch: # Enable manual trigger
   # schedule:
   #   - cron: "0 0 1 * *"
-  workflow_dispatch:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
-    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
     permissions:
       contents: write
       pull-requests: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # submodules: true
-          token: ${{ secrets.SYNC_FROM_UPSTREAM }}
-
+        # with:
+        #   submodules: true
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2 # Docs: https://github.com/marketplace/actions/actions-template-sync
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: olivercaine/ultimate-app
           upstream_branch: main
           is_pr_cleanup: true # Update when upstream branch is changed
