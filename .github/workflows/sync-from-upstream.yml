@@ -2,7 +2,7 @@
 
 name: Sync from upstream
 on:
-  # push:
+  push:
     branches:
       - main
   # schedule:
