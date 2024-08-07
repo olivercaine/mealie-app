@@ -1,45 +1,33 @@
 {
-  "name": "@olivercaine/ultimate-app-spike",
+  "name": "create-t3-turbo",
   "private": true,
+  "engines": {
+    "node": ">=20.15.0"
+  },
+  "packageManager": "pnpm@9.6.0",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "test": "turbo run test",
-    "clean": "rimraf {apps,packages}/**/{node_modules,dist,.next,.turbo} -g && rimraf node_modules",
-    "prepare": "husky install",
-    "health-check": "turbo run health-check",
-    "install:docker": "docker run --rm -w /app -v ${PWD}:/app --expose 7000 -p 6006:6006 -p 3000:3000 $(docker build . -q) sh -c 'pnpm install && pnpm build'"
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo run clean",
+    "db:push": "turbo -F @acme/db push",
+    "db:studio": "turbo -F @acme/db studio",
+    "dev": "turbo watch dev",
+    "dev:next": "turbo watch dev -F @acme/nextjs...",
+    "format": "turbo run format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:ws": "pnpm dlx sherif@latest",
+    "postinstall": "pnpm lint:ws",
+    "typecheck": "turbo run typecheck",
+    "ui-add": "turbo run ui-add"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
-    "@commitlint/cz-commitlint": "^19.2.0",
-    "commitizen": "^4.3.0",
-    "husky": "9.1.4",
-    "lint-staged": "^15.2.8",
-    "prettier": "^3.3.3",
-    "turbo": "^2.0.11",
-    "typescript": "^5.5.4"
+    "@acme/prettier-config": "workspace:*",
+    "@turbo/gen": "^2.0.8",
+    "prettier": "catalog:",
+    "turbo": "^2.0.8",
+    "typescript": "catalog:"
   },
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "pnpm@8.15.3",
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "vitest related --run --bail",
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{md,json}": [
-      "prettier -w"
-    ]
-  }
+  "prettier": "@acme/prettier-config"
 }
